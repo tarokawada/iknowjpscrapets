@@ -1,0 +1,27 @@
+{
+  "name": "iknowjpscrapets",
+  "version": "1.0.0",
+  "description": "Scraping japanese words from https://iknow.jp/content/japanese",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "node ./dist/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tarokawada/iknowjpscrapets.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/tarokawada/iknowjpscrapets/issues"
+  },
+  "homepage": "https://github.com/tarokawada/iknowjpscrapets#readme",
+  "dependencies": {
+    "puppeteer": "^1.19.0"
+  },
+  "devDependencies": {
+    "@types/puppeteer": "^1.19.1"
+  }
+}

@@ -13,7 +13,35 @@ class Spoodermon {
     puppeteer.launch().then(async (browser: any) => {
       const page = await browser.newPage();
       await page.goto(this.baseUrl);
-      await page.screenshot({ path: `${this.outputName}.png` });
+      await page.waitForSelector(".cue");
+
+      let data = await page.evaluate(() => {
+        let cueResponses = Array.from(
+          document.querySelectorAll(".cue-response")
+        ).map(cueResponse => {
+          let cue = cueResponse.getElementsByClassName("cue")[0].innerHTML;
+          let meaning = cueResponse
+            .getElementsByClassName("response")[0]
+            .innerHTML.split(",");
+          let transliteration = cueResponse.getElementsByClassName(
+            "transliteration"
+          );
+          if (transliteration.length) {
+            let text = transliteration[0].innerHTML;
+            let hiragana = text.match(/([ぁ-んァ-ン])/g);
+
+            return {
+              vocab: cue,
+              hiragana: hiragana ? hiragana.join("") : hiragana,
+              meaning
+            };
+          }
+          return { vocab: cue, hiragana: cue, meaning };
+        });
+
+        return cueResponses;
+      });
+      console.log(data);
       await browser.close();
     });
   }

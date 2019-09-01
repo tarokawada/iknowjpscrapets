@@ -44,7 +44,7 @@ var Spoodermon = /** @class */ (function () {
     Spoodermon.prototype.crawl = function () {
         var _this = this;
         puppeteer.launch().then(function (browser) { return __awaiter(_this, void 0, void 0, function () {
-            var page;
+            var page, data;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0: return [4 /*yield*/, browser.newPage()];
@@ -53,11 +53,34 @@ var Spoodermon = /** @class */ (function () {
                         return [4 /*yield*/, page.goto(this.baseUrl)];
                     case 2:
                         _a.sent();
-                        return [4 /*yield*/, page.screenshot({ path: this.outputName + ".png" })];
+                        return [4 /*yield*/, page.waitForSelector(".cue")];
                     case 3:
                         _a.sent();
-                        return [4 /*yield*/, browser.close()];
+                        return [4 /*yield*/, page.evaluate(function () {
+                                var cueResponses = Array.from(document.querySelectorAll(".cue-response")).map(function (cueResponse) {
+                                    var cue = cueResponse.getElementsByClassName("cue")[0].innerHTML;
+                                    var meaning = cueResponse
+                                        .getElementsByClassName("response")[0]
+                                        .innerHTML.split(",");
+                                    var transliteration = cueResponse.getElementsByClassName("transliteration");
+                                    if (transliteration.length) {
+                                        var text = transliteration[0].innerHTML;
+                                        var hiragana = text.match(/([ぁ-んァ-ン])/g);
+                                        return {
+                                            vocab: cue,
+                                            hiragana: hiragana ? hiragana.join("") : hiragana,
+                                            meaning: meaning
+                                        };
+                                    }
+                                    return { vocab: cue, hiragana: cue, meaning: meaning };
+                                });
+                                return cueResponses;
+                            })];
                     case 4:
+                        data = _a.sent();
+                        console.log(data);
+                        return [4 /*yield*/, browser.close()];
+                    case 5:
                         _a.sent();
                         return [2 /*return*/];
                 }

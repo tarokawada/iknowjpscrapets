@@ -36,6 +36,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 var puppeteer = require("puppeteer");
+var fs = require("fs");
 var Spoodermon = /** @class */ (function () {
     function Spoodermon(baseUrl, outputName) {
         this.baseUrl = baseUrl;
@@ -78,7 +79,11 @@ var Spoodermon = /** @class */ (function () {
                             })];
                     case 4:
                         data = _a.sent();
-                        console.log(data);
+                        fs.writeFile("./json/teams.json", JSON.stringify(data, null, 2), function (err) {
+                            return err
+                                ? console.error("Data not written", err)
+                                : console.log("Data written");
+                        });
                         return [4 /*yield*/, browser.close()];
                     case 5:
                         _a.sent();

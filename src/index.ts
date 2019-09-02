@@ -1,4 +1,5 @@
 const puppeteer = require("puppeteer");
+const fs = require("fs");
 
 class Spoodermon {
   private baseUrl: string;
@@ -41,7 +42,14 @@ class Spoodermon {
 
         return cueResponses;
       });
-      console.log(data);
+      fs.writeFile(
+        "./json/teams.json",
+        JSON.stringify(data, null, 2),
+        (err: any) =>
+          err
+            ? console.error("Data not written", err)
+            : console.log("Data written")
+      );
       await browser.close();
     });
   }
